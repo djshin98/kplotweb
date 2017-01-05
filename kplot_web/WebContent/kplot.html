@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>KPlot</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="lib/highlight/github.css" />
+<link rel="stylesheet" href="dist/css/lobipanel.min.css" />
+<link rel="stylesheet" href="css/fileinput.min.css" />
+<link rel="stylesheet" href="css/bar.css" />
+
+<link rel="stylesheet" href="css/slick.grid.css" type="text/css"/>
+<link rel="stylesheet" href="css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+<link rel="stylesheet" href="examples.css" type="text/css"/>
+<link rel="stylesheet" href="css/tooltip.css" type="text/css"/>
+<link rel="stylesheet" href="css/split.css" type="text/css"/>
+
+<!-- 
+<script src="lib/jquery-1.7.min.js"></script>
+<script src="lib/jquery-ui-1.8.16.custom.min.js"></script>
+ -->
+
+<script src="lib/jquery.1.11.min.js"></script>
+<script src="lib/jquery-ui.min.js"></script>
+<script src="lib/jquery.ui.touch-punch.min.js"></script>
+<script src="bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="lib/highlight/highlight.pack.js"></script>
+<script src="dist/js/lobipanel.js"></script>
+
+<script src="lib/firebugx.js"></script>
+<script src="lib/jquery.event.drag-2.2.js"></script>
+
+<script src="js/slick.core.js"></script>
+<script src="plugins/slick.autotooltips.js"></script>
+<script src="plugins/slick.cellrangedecorator.js"></script>
+<script src="plugins/slick.cellrangeselector.js"></script>
+<script src="plugins/slick.cellcopymanager.js"></script>
+<script src="plugins/slick.cellselectionmodel.js"></script>
+<script src="js/slick.editors.js"></script>
+<script src="js/slick.grid.js"></script>
+
+<!--  <script src="js/d3.js"></script>-->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="js/tooltip.js"></script>
+<script src="js/hse.js"></script>
+<script src="js/jstorage.js"></script>
+<script src="js/pc_mcore.min.js"></script>
+<script src="js/applogin_handler.js"></script>
+<script src="js/apptable_handler.js"></script>
+
+<style>
+.modal{
+	z-index:10002;
+}
+.top-bar-item {
+	display: inline-block;
+}
+.tableitem{
+cursor:pointer;
+}
+.tableitem:hover{
+color:red;
+}
+#file-title{
+	color: white;
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 1.6em;
+    margin-top: 0.5em;
+    margin-right: 2em;
+}
+.panel-body{
+	height:400px;
+}
+.panel-body>.media{
+	height:100%;
+}
+.query-text{
+	font-size:1.2em;
+	resize: none;
+    width: 100%;
+    min-height: 300px;
+    margin: 0px;
+}
+.dropdown-menu{
+z-index:10004;
+}
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+</style>
+<script>
+	var debug = {
+		log : function(v) {
+			console.log(v);
+		}
+	};
+</script>
+
+<script src="js/split.js"></script>
+<link href="css/kplot.css" rel="stylesheet" />
+<script src="js/kplot.js"></script>
+
+<script>
+	
+	$(document)
+			.ready(
+					function() {
+						var topmenuHeight = $('#top-menu').height();
+						var kplotContentHeight = window.innerHeight
+								- topmenuHeight;
+						$('#kplot-content').css("margin-top", topmenuHeight);
+						$('#kplot-content').height(kplotContentHeight);
+						$('#section-home').height(kplotContentHeight);
+						
+						kplot.init("#datasource","#database-query");
+						
+						var kplotContentWidth = window.innerWidth
+								- $('#left-pane').width();
+						
+						$('#right-pane').height(kplotContentHeight);
+						$('#right-pane').width(kplotContentWidth);
+						$('#right-pane').css("left", $('#left-pane').width());
+
+						var codes = $('.highlight code');
+						codes.each(function(ind, el) {
+							hljs.highlightBlock(el);
+						});
+					
+						$('#lobipanel-multiple').find('.panel').lobiPanel({
+							sortable : true
+						});
+
+						var showSubMenu = [];
+						$('.dropdown-submenu a.test').on("click", function(e) {
+							$.each(showSubMenu, function(index, t) {
+								t.hide();
+								console.log('hide : submenu')
+							});
+
+							showSubMenu = [];
+							$(this).next('ul').toggle();
+							if ($(this).next('ul').is(':visible')) {
+								showSubMenu.push($(this).next('ul'));
+							}
+							e.stopPropagation();
+							e.preventDefault();
+						});
+
+						$('#section-home').show();
+						$('#section-example').hide();
+						$('#section-sample').hide();
+
+						$('#mySearchModal').on('show.bs.modal',
+										function(e) { 
+									$('#searchlist-container').empty();
+									kplot.ui.menu.select.search(
+											$('#searchFile').val(),
+											function(index, avv) {
+												if( index >= 0 ){
+													
+													var tableid = "gettable_"+ index;
+													var item = null;
+													if( avv.queryType == "table" )
+														item = $("<tr class='tableitem' id='"+tableid+"' ><td>"+(index+1)+"</td><td>"+avv.tableName+"</td><td>"+avv.tableDesc+"</td><td>@mdo</td></tr>");
+													else
+														item = $("<tr class='tableitem' id='"+tableid+"' ><td>"+(index+1)+"</td><td>"+avv.tableName+"</td><td>"+avv.tableSource+"</td><td>@mdo</td></tr>");
+													
+													item.bind('click',function() {
+														kplot.getTable(tableid,avv.tableName,avv.tableSource,avv.tableDesc,avv.queryType);
+														$("#mySearchModal").modal('hide');
+														if( avv.queryType == "table" )
+															$("#file-title").text(avv.tableDesc);
+														else
+															$("#file-title").text(avv.tableName);
+													});
+													$('#searchlist-container').append(item);
+												}
+										});
+						});
+						
+						$('#searchFile').on('keydown', function(e) {
+						    if (e.which == 13) {
+						    	//$("#mySearchModal").modal('show');
+						        e.preventDefault();
+						    }
+						});
+
+					});
+
+	$(function() {
+		$('#file-input')
+				.change(
+						function(evt) {
+							$this = $(this);
+							$("#filelist-container").empty();
+							var delay = 500;
+							for (var i = 0; i < this.files.length; i++) {
+								var id = "uploadfile_" + i;
+								var fname = this.files[i].name
+										.replace(".", "_");
+								var item = $("<li id='"+id+"' style='list-style-type:none;'><i class='fa fa-file-image-o'></i>&nbsp;"
+										+ this.files[i].name + "</li>");
+								$("#filelist-container").append(item);
+								var formData = new FormData();
+								formData.append("uploadfile", this.files[i]);
+								formData.append("extra", id);
+
+								$.ajax({
+									url : 'upload',
+									processData : false,
+									contentType : false,
+									data : formData,
+									type : 'POST',
+									success : function(result) {
+										//var idresult.extra = 
+										//var fname = result.replace(".", "_");
+										$("#" + result.extra).append(" 100%");
+										delay += 200;
+										var t = window.setTimeout(function() {
+											$("#" + result.extra).remove();
+										}, delay);
+
+									},
+									error : function(result) {
+										var fname = result.replace(".", "_");
+										$("#" + fname).append(" failed");
+										$("#" + fname).remove();
+									}
+								});
+							}
+							$('#file-input').val('');
+
+						});
+	});
+</script>
+
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+	<nav id="top-menu" class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header top-bar-item">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#myNavbar">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Kplot</a>
+			</div>
+			<div class="top-bar-item">
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav">
+						<li><a href="#" onclick="kplot.ui.menu.select.home()">Home</a></li>
+						<li><a href="#" onclick="kplot.ui.menu.select.example()">Example</a></li>
+						<li><a href="#" onclick="kplot.ui.menu.select.sample()">Sample</a></li>
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#">File <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a tabindex="-1" href="#" data-toggle="modal"
+									data-target="#myModal">Upload</a></li>
+								<li><a tabindex="-1" href="#" data-toggle="modal"
+									data-target="#myQueryModal">Query</a></li>
+								<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.next()">Next</a></li>
+								<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.reverse()">Reverse</a></li>
+								<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.editor('graph-content')">Script Editor</a></li>
+							</ul></li>
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#">Graph <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.line()">Line Graph</a></li>
+								<li class="dropdown-submenu"><a class="test" tabindex="-1"
+									href="#">Bar Graph<span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.vertical()">Vertical
+												Bar Graph</a></li>
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.horizontal()">Horizontal
+												Bar Graph</a></li>
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.stack()">Stack
+												Bar Graph</a></li>
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.stackHorz()">Stack Horizontal Bar Graph</a></li>
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.ratio()">Ratio
+												Bar Graph</a></li>
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.multi()">Multi
+												Bar Graph</a></li>
+									</ul>
+								<li class="dropdown-submenu"><a class="test" tabindex="-1"
+									href="#">Pie Graph<span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.pie.pie()">Pie Graph</a></li>
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.pie.band()">Band Graph</a></li>
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.pie.star()">Star Graph</a></li>
+									</ul></li>
+								<li class="dropdown-submenu"><a class="test" tabindex="-1"
+									href="#">Histo Graph<span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.histo.horizontal()" >Vertical Histo Graph</a></li>
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.histo.vertical()" >Horizontal Histo Graph</a></li>
+									</ul></li>
+								<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.complex()">Complex</a></li>
+								<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.scatter(0,1,2)">Scatter</a></li>
+							</ul></li>
+								
+					</ul>
+				</div>
+			</div>
+			<div class="pull-right top-bar-item ">
+				<form class="navbar-form" role="search">
+					<div class="input-group">
+						<input id="searchFile" type="text" class="form-control"
+							placeholder="Search" name="q">
+						<div class="input-group-btn">
+							<a class="btn btn-default" data-toggle="modal"
+								data-target="#mySearchModal"><i class="glyphicon glyphicon-search"></i></a>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="pull-right top-bar-item "><div id="file-title"></div></div>
+			
+		</div>
+	</nav>
+	<div id="kplot-content">
+		<div id="section-home">
+			<div class="gridContainer panes-container" >
+				<div id="left-pane" class="left-pane"></div>
+				<div class="panes-separator" id="panes-separator"></div>
+				<div id="right-pane" class="right-pane" >
+					<div class="lobipanel">
+						<div id="lobipanel-multiple">
+							<!-- <h3>Multiple panels with drag & drop</h3>
+							<p>Drag panels by clicking on the headers</p> -->
+							<div class="bs-example">
+								<div class="row">
+									<div id="graph-content" class="col-md-6">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div id="section-example" style="display: none;"
+			class="container-fluid">
+			<h1>Example Page</h1>
+			<p>통그라미 예제 파일 </p>
+			<p>Try to scroll this section and look at the navigation bar
+				while scrolling! Try to scroll this section and look at the
+				navigation bar while scrolling!</p>
+		</div>
+		<div id="section-sample" style="display: none;"
+			class="container-fluid">
+			<h1>Sample Page</h1>
+			<p>통그라미 샘플 파일</p>
+			<p>Try to scroll this section and look at the navigation bar
+				while scrolling! Try to scroll this section and look at the
+				navigation bar while scrolling!</p>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">액셀 파일 입력</h4>
+				</div>
+				<div class="modal-body">
+					<div tabindex="500" class="btn btn-primary btn-file">
+						<i class="glyphicon glyphicon-folder-open"></i>&nbsp; <span
+							class="hidden-xs">파일 추가</span> <input id="file-input" type="file"
+							name="files[]" multiple class="file-loading">
+					</div>
+					<div id="filelist">
+						<ul id="filelist-container">
+						</ul>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="mySearchModal" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+
+					<div id="searchlist">
+						<div>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Table Name</th>
+										<th>Table Description</th>
+										<th>By User</th>
+									</tr>
+								</thead>
+								<tbody id="searchlist-container">
+									
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="myQueryModal" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title" style="text-indent:1em;" ><div class="dropdown" style="float:left;">
+    <button class="btn btn-default dropdown-toggle" type="button" id="datasource-menu" data-toggle="dropdown">Data Source
+    <span class="caret"></span></button>
+    <ul id="datasource" class="dropdown-menu" role="menu" aria-labelledby="datasource-menu">
+    </ul>
+  </div><p>Statistics Database Query</p></h4>
+				</div>
+				<div class="modal-body">
+					<div>
+					<textarea class="query-text" id="database-query"></textarea>	
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal"
+									data-target="#saveModal" onclick="kplot.onSave($('#datasource-menu').text(),$('#database-query').val());" >Save</button>
+					<button type="button" class="btn btn-default" onclick="kplot.query('#datasource-menu','#database-query');" >Query</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="saveModal" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Save Query</h4>
+				</div>
+				<div class="modal-body">
+					<p>Name : <input type="text" id="save-query-name" /></p>
+					<p>DataSource : <div id="save-datasource" style="text-indent:2em" ></div></p>
+					<p>Query : <div id="save-query" style="text-indent:2em" ></div></p>
+				<div class="modal-footer">
+				 
+				 	<button type="button" class="btn btn-default" data-dismiss="modal" onclick="kplot.saveQuery($('#save-query-name').val(),$('#save-datasource').text(),$('#save-query').text());" >Save</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+
+<script>
+ 
+  /***
+   * A proof-of-concept cell editor with Excel-like range selection and insertion.
+   */
+  function FormulaEditor(args) {
+    var _self = this;
+    var _editor = new Slick.Editors.Text(args);
+    var _selector;
+
+    $.extend(this, _editor);
+
+    function init() {
+      // register a plugin to select a range and append it to the textbox
+      // since events are fired in reverse order (most recently added are executed first),
+      // this will override other plugins like moverows or selection model and will
+      // not require the grid to not be in the edit mode
+      _selector = new Slick.CellRangeSelector();
+      _selector.onCellRangeSelected.subscribe(_self.handleCellRangeSelected);
+      args.grid.registerPlugin(_selector);
+    }
+
+    this.destroy = function () {
+      _selector.onCellRangeSelected.unsubscribe(_self.handleCellRangeSelected);
+      kplot.grid.unregisterPlugin(_selector);
+      _editor.destroy();
+    };
+
+    this.handleCellRangeSelected = function (e, args) {
+      _editor.setValue(
+          _editor.getValue() +
+          	kplot.grid.getColumns()[args.range.fromCell].name +
+          	args.range.fromRow +
+              ":" +
+          	kplot.grid.getColumns()[args.range.toCell].name +
+           	args.range.toRow
+      );
+    };
+
+
+    init();
+  }
+
+
+  $(function () {
+	  kplot.addSheetX( new SheetX("") );
+  })
+</script>
+
+</body>
+</html>
+

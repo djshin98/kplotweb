@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+   <style>
+        .title{font-size:15pt; fill:blue;}
+	.main text {font: 13px sans-serif;}
+	.axis line, .axis path {
+	    shape-rendering: crispEdges;
+	    stroke: black;
+	    fill: none;
+	}
+	circle {stroke: black; fill: red;}
+   </style>
+   <script src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+    <div class="content"></div>
+      <script>
+	var data = [[170,60], [175,70], [180,85], [166,65],[173,73],[174,64],[177,71],[163,55]];
+	var margin = {top: 50, bottom: 60, left: 30, right: 20};
+	var width  = 300;
+	var height = 100;
+        var xmin   = d3.min(data, function(d){ return d[0];}); 
+        var xmax   = d3.max(data, function(d){ return d[0];}); 
+        var xbuffer= (xmax-xmin) / 10;     // 경계점이 보이기위한 완충거리
+        var gxmin  = xmin-xbuffer;
+        var gxmax  = xmax+xbuffer;
+	var x      = d3.scale.linear().domain([gxmin, gxmax]).range([ 0, width ]);
+
+	var chart  = d3.select("body")
+		       .append("svg")
+ 		       .attr("width", width + margin.right + margin.left)
+   		       .attr("height", height + margin.top + margin.bottom)
+		       .attr("class", "chart")
+	var main = chart.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+			.attr("width",  width)
+			.attr("height", height)
+			.attr("class", "main")   
+        chart.append("text").attr("class","title").attr("x",100).attr("y",40)
+               .text("신장의 점그래프")
+        
+	// x축 그리기
+   	var xAxis = d3.svg.axis().scale(x).orient("bottom");
+	main.append("g")
+	    .attr("transform", "translate(0," + height + ")")
+ 	    .attr("class", "main axis date")
+	    .call(xAxis);
+
+	// 점 그리기
+	var g = main.append("svg"); 
+	g.selectAll("scatter-dots")
+         .data(data)
+         .enter().append("svg:circle")
+         .attr("cx", function(d,i){ return x(d[0]); } )
+         .attr("cy", 20 + margin.bottom )
+         .attr("r", 4);
+      </script>
+  </body>
+</html>

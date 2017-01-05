@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+  <head>
+    <title>Pie Chart</title>
+    <style>
+      svg {width:300px; height:300px; border:1px solid black;}
+      .pie {fill:yellow; stroke:white;}
+      .pieFreq {font-size: 10pt; text-anchor:middle; fill:white}
+    </style>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+
+  <body>
+    <h2>원그래프 - 원조각 애니메이션 </h2>
+    <svg id="PieChart"></svg>
+    <script>
+      var svgWidth  = 300;
+      var svgHeight = 300;
+      var vname     = ["수도권","호남권","영남권"];
+      var dataSet   = [20, 7, 13];
+      var myColor   = ["red","green","blue"]
+      var pie = d3.layout.pie();
+      var arc = d3.svg.arc().innerRadius(0).outerRadius(100);
+      var pieSlice = d3.select("#PieChart")
+                       .selectAll("g")
+                       .data(pie(dataSet))
+                       .enter()
+                       .append("g")
+                       .attr("transform", "translate("+svgWidth/2+","+svgHeight/2+")")
+      pieSlice.append("path")
+              .attr("class","pie")
+              .attr("d",arc)
+              .style("fill",function(d,i){ return myColor[i];})
+              .transition()
+              .duration(1000)
+              .delay(function(d,i){ return i*200;})
+              .ease("linear")
+              .attrTween("d", function(d,i) {
+                var interpolate = d3.interpolate(
+                  { startAngle:d.startAngle, endAngle: d.startAngle },
+                  { startAngle:d.startAngle, endAngle: d.endAngle }
+                );
+                return function(t) { return arc(interpolate(t));
+                }
+              })
+      pieSlice.append("text")
+              .attr("class","pieFreq")
+              .attr("transform",function(d,i){ return "translate("+arc.centroid(d)+")";})
+              .text(function(d,i){ return vname[i]+d.value;})
+    </script>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>Histogram</title>
+    <style>
+      svg {width: 400px; height: 450px; border: 1px solid black; }
+      .bar {fill: teal; stroke: white; stroke-width: 1;}
+      .axis text {font-family: sans-serif; font-size: 10px;}
+      .axis path,
+      .axis line {fill: none; stroke: black;}
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+    <h2> 히스토그램 </h2>
+    <svg id="Histo"></svg>
+    <form>
+      <p>간격<input type="text" value="10" id="step"></p>
+    </form>
+    <script>
+      var svgWidth = 400;
+      var svgHeight= 400;
+      var margin   = {top: 10, right: 10, bottom: 50, left: 50};
+      var yHeight  = svgHeight - margin.top - margin.bottom;
+      var xWidth   = svgWidth - margin.left - margin.right;
+      var dataSet  = [70,60,75,70,80,85,66,65,73,73,74,64,77,71,63,55];
+      var xMin     = 0;
+      var xMax     = 100;
+      var stepX    = 10;
+      var xScale;
+      var yScale;
+      var histogram = d3.layout.histogram()
+                        .range([xMin,xMax])
+                        .bins(d3.range(xMin, 100.1, stepX))
+      calcScale();
+      drawHistogram()
+      drawScale()
+      d3.select("#step").on("change", function(){
+        stepX = this.value;
+        histogram.bins(d3.range(xMin, 100.1, stepX))
+        d3.select("#Histo").selectAll("*").remove();
+        calcScale();
+        drawHistogram()
+        drawScale()
+      })
+
+
+      function calcScale() {
+        var maxFreq  = d3.max(histogram(dataSet), function(d, i){ return d.y;} );
+        yScale   = d3.scale.linear().domain([0, maxFreq+1]).range([yHeight, 0])
+        xScale   = d3.scale.linear().domain([xMin, xMax]).range([0,xWidth])
+      }
+
+      function drawScale() {
+        d3.select("#Histo")
+          .append("g")
+          .attr("class","axis")
+          .attr("transform","translate("+margin.left+", "+margin.bottom+") ")
+          .call(d3.svg.axis().scale(yScale).orient("left"))
+        d3.select("#Histo")
+          .append("g")
+          .attr("class","axis")
+          .attr("transform","translate("+margin.left+", "+(yHeight+margin.bottom)+")")
+          .call(d3.svg.axis().scale(xScale).orient("bottom"))
+      }
+
+      function drawHistogram(){
+    console.log( "-----drawHistogram-------" );
+        // console.log( "height :" + yHeight - yScale(d.y) );
+        // console.log( "height :" + yHeight - yScale(d.y) );
+        // console.log( "height :" + yHeight - yScale(d.y) );
+        // console.log( "height :" + yHeight - yScale(d.y) );
+        // console.log( "height :" + yHeight - yScale(d.y) );
+        // console.log( "height :" + yHeight - yScale(d.y) );
+
+        var bar = d3.select("#Histo")
+                  .selectAll("rect")
+                  .data(histogram(dataSet))
+                  .enter()
+                  .append("rect")
+                  .attr("class","bar")
+                  .attr("x",function(d,i){
+                    console.log( "d.dx : " + d.dx + " , xScale : " + xScale(d.dx) + " " );
+                    return i*xScale(d.dx)+ margin.left;} )
+                  .attr("y",function(d,i){
+                    return yScale(d.y) + margin.bottom;} )
+                  .attr("width", function(d,i) {
+                    return xScale(d.dx);} )
+                  .attr("height",function(d,i) {
+                      console.log( "height :" + yHeight - yScale(d.y) );
+                    return yHeight - yScale(d.y);} )
+      }
+
+
+    </script>
+</html>

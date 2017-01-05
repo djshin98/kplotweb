@@ -1,0 +1,32 @@
+.panes-container {
+	display: flex;
+	width: 100%;
+	overflow: hidden;
+}
+
+.left-pane {
+	z-index: 1;
+	width: 18%;
+	background: #ccc;
+}
+
+.panes-separator {
+	width: 3px;
+	background: #eee;
+	border: #ccc;
+	position: relative;
+	cursor: col-resize;
+	z-index: 1;
+}
+
+.right-pane {
+	flex: auto;
+	background: grey;
+	overflow:auto;
+}
+
+.panes-container, .panes-separator, .left-pane, .right-pane {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>KPlot</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="lib/highlight/github.css" />
+<link rel="stylesheet" href="dist/css/lobipanel.min.css" />
+<link rel="stylesheet" href="css/bar.css" />
+<link rel="stylesheet" href="css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+<link rel="stylesheet" href="css/tooltip.css" type="text/css"/>
+<link rel="stylesheet" href="css/stats.css" type="text/css"/>
+
+<script src="lib/jquery.1.11.min.js"></script>
+<script src="lib/jquery-ui.min.js"></script>
+<script src="lib/jquery.ui.touch-punch.min.js"></script>
+<script src="bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="lib/highlight/highlight.pack.js"></script>
+<script src="dist/js/lobipanel.js"></script>
+<script src="lib/firebugx.js"></script>
+<script src="lib/jquery.event.drag-2.2.js"></script>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="js/tooltip.js"></script>
+<script src="js/hse.js"></script>
+<script src="js/jstorage.js"></script>
+<script src="js/pc_mcore.min.js"></script>
+<script src="js/applogin_handler.js"></script>
+<script src="js/apptable_handler.js"></script>
+<script src="js/kplot.js"></script>
+
+<script>
+	
+function fnSearch(){
+	var param = {
+		method : 'term',
+		sido : 'rg-0000',
+		sgg : 'rg-0001',
+		start_date : '2016-06-01 00:00:00.000',
+		end_date : '2016-07-01 00:00:00.000'
+	}
+	$.ajax({
+		url : '/measureStats/term/ajax.do',
+		type : 'POST',
+		data: JSON.stringify( param ),
+	    processData: false,
+	    contentType: "application/json; charset=utf-8",
+		success : function(data) {
+			alert( data );
+			//jvar.onSuccess( data , {} );
+		},
+		error : function(httpReq, status, exception) {
+			//jvar.onError( {} , {} );
+		}
+	});
+}
+
+	$(document)
+			.ready(
+					function() {
+						$('#lobipanel-multiple').find('.panel').lobiPanel({
+							sortable : true
+						});
+					});
+</script>
+
+</head>
+<body >
+	<table id="userListTb" class="tbl_list mt10" style="text-align:center" summary="">
+	                    <colgroup>
+		               		<col width="5%"/>
+		               		<col width="10%"/>
+		               		<col width="10%"/>
+		               		<col width="10%"/>
+		               		<col width="10%"/>
+		               		<col width="10%"/>
+		               		<col width="10%"/>
+		               		<col width="10%"/>
+		               		<col width="10%"/>
+	               		</colgroup>
+                      <thead>
+                      	<tr id="table-head">
+                           
+                        </tr>
+                      </thead>
+                      <tbody id="table-body">
+                      
+                      </tbody>
+                    </table>
+	<div id="kplot-content">
+		<div id="section-home">
+			<div class="gridContainer panes-container" >
+				<div id="right-pane" class="right-pane" >
+					<div class="lobipanel">
+						<div id="lobipanel-multiple">
+							<!-- <h3>Multiple panels with drag & drop</h3>
+							<p>Drag panels by clicking on the headers</p> -->
+							<div class="bs-example">
+								<div class="row">
+									<div id="graph-content" class="col-md-6">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+<script>
+function makeColumn(f){
+	var thead = $("#table-head");
+	thead.empty();
+	thead.append( $("<th><input type=\"checkbox\" name=\"checkAll\" id=\"checkAll\" onclick=\"fnCheckAll(this, 'roadIds');\" /></th>"));
+	for( var i = 0 ; i < f.length ; i++ ){
+	  	var th = $("<th>"+f[i].name+"</th>");
+	  	thead.append(th);
+	}
+}
+ 
+ function term(){
+	 var ds = "java:comp/env/jdbc/tibero-cr";
+	  var query = "term";
+	  kplot.query( ds ,query , function(graphx,data){
+		
+		  makeColumn(data.fields);
+		  
+		  var tbody = $("#table-body");
+		  tbody.empty();
+		  for( var i = 0 ; i < data.rows.length ; i++ ){
+			  var tr = $("<tr><td><input type='checkbox' name='roadIds' id='roadIds-"+i+"' value='"+i+"' /></td>"
+             +"<td>"+data.rows[i][data.fields[0].name]+"년</td>"
+             +"<td>"+data.rows[i][data.fields[1].name]+"월</td>"
+             +"<td>"+data.rows[i][data.fields[2].name].toFixed(2)+"</td>"
+             +"<td>"+data.rows[i][data.fields[3].name].toFixed(2)+"</td>"
+             +"<td>"+data.rows[i][data.fields[4].name].toFixed(2)+"</td>"
+             +"<td>"+data.rows[i][data.fields[5].name]+"</td>"
+ 			  +"</tr>");
+			  tbody.append( tr );
+		  }
+		  graphx.merge([0,1],"" , "/" , "" );
+		  
+		  kplot.ui.menu.select.graph.complex([3,4,5],[6]);
+		  graphx.title("기간별 측정 통계");
+	  });
+ }
+ function area(){
+	 var ds = "java:comp/env/jdbc/tibero-cr";
+	  var query = "area";
+	  kplot.query( ds ,query , function(graphx,data){
+		  makeColumn(data.fields);
+		  var tbody = $("#table-body");
+		  for( var i = 0 ; i < data.rows.length ; i++ ){
+			  var tr = $("<tr><td><input type='checkbox' name='roadIds' id='roadIds-"+i+"' value='"+i+"' /></td>"
+             +"<td>"+data.rows[i][data.fields[0].name]+"</td>"
+             +"<td>"+data.rows[i][data.fields[1].name]+"</td>"
+             +"<td>"+data.rows[i][data.fields[2].name].toFixed(2)+"</td>"
+             +"<td>"+data.rows[i][data.fields[3].name].toFixed(2)+"</td>"
+             +"<td>"+data.rows[i][data.fields[4].name].toFixed(2)+"</td>"
+             +"<td>"+data.rows[i][data.fields[5].name]+"</td>"
+ 			  +"</tr>");
+			  tbody.append( tr );
+		  }
+		  kplot.ui.menu.select.graph.bar.horizontal(1,[2,3,4,5]);
+		  graphx.title(data.rows[0]["시도"] + " 지역별 측정 통계");
+	  });
+ }
+ function road(){
+	 var ds = "java:comp/env/jdbc/tibero-cr";
+	  var query = "road";
+	  kplot.query( ds ,query , function(graphx,data){
+		  makeColumn(data.fields);
+		  var tbody = $("#table-body");
+		  for( var i = 0 ; i < data.rows.length ; i++ ){
+			  var str = "";
+			  for( var c = 2 ; c < data.fields.length ; c++ ){
+				  str += "<td>"+data.rows[i][data.fields[c].name].toFixed(2)+"</td>";
+			  }
+			  var tr = $("<tr><td><input type='checkbox' name='roadIds' id='roadIds-"+i+"' value='"+i+"' /></td>"
+             	+"<td>"+data.rows[i][data.fields[0].name]+"</td>"
+             	+"<td>"+data.rows[i][data.fields[1].name]+"</td>" + str
+ 			  	+"</tr>");
+			  tbody.append( tr );
+		  }
+		  var gfs = [2];//data.fields.filter(function(d,i){return (i>=2)?true:false});
+		  kplot.ui.menu.select.graph.line(1,gfs);
+		  graphx.title(data.rows[0]["도로명(방향)"] + " 도로별 측정 통계");
+	  });
+ }
+ function overroad(){
+	 var ds = "java:comp/env/jdbc/tibero-cr";
+	  var query = "overroad";
+	  kplot.query( ds ,query , function(graphx,data){
+		  makeColumn(data.fields);
+		  var tbody = $("#table-body");
+		  for( var i = 0 ; i < data.rows.length ; i++ ){
+			  var tr = $("<tr><td><input type='checkbox' name='roadIds' id='roadIds-"+i+"' value='"+i+"' /></td>"
+             	+"<td>"+data.rows[i][data.fields[0].name]+"</td>"
+             	+"<td>"+data.rows[i][data.fields[1].name]+"</td>"
+             	+"<td>"+data.rows[i][data.fields[2].name].toFixed(2)+"</td>"
+                +"<td>"+data.rows[i][data.fields[3].name].toFixed(2)+"</td>"
+                +"<td>"+data.rows[i][data.fields[4].name].toFixed(2)+"</td>"
+    			  +"</tr>");
+   			  	tbody.append( tr );
+   		  }
+		  
+		  var gfs = [2,3,4];//data.fields.filter(function(d,i){return (i>=2)?true:false});
+		  kplot.ui.menu.select.graph.complex(1,[2],[3,4]);
+		  graphx.title(data.rows[0][data.fields[0].name] + " 기준초과도로 현황통계");
+	  });
+ }
+ 
+ function mailage(){
+	 var ds = "java:comp/env/jdbc/tibero-cr";
+	  var query = "mailage-cnt";
+	  kplot.query( ds ,query , function(graphx,data){
+		  makeColumn(data.fields);
+		  var tbody = $("#table-body");
+		  for( var i = 0 ; i < data.rows.length ; i++ ){
+			  var str = "";
+			  for( var c = 2 ; c < data.fields.length ; c++ ){
+				  str += "<td>"+data.rows[i][data.fields[c].name].toFixed(2)+"</td>";
+			  }
+			  var tr = $("<tr><td><input type='checkbox' name='roadIds' id='roadIds-"+i+"' value='"+i+"' /></td>"
+             	+"<td>"+data.rows[i][data.fields[0].name]+"</td>"
+             	+"<td>"+data.rows[i][data.fields[1].name]+"</td>" + str
+ 			  	+"</tr>");
+			  tbody.append( tr );
+		  }
+		  var gfs = [2,4,6,8,10];//data.fields.filter(function(d,i){return (i>=2)?true:false});
+		  kplot.ui.menu.select.graph.bar.stack(1,gfs);
+		  graphx.title(data.rows[0][data.fields[0].name] + " 측정 마일리지");
+	  });
+ }
+ 
+  $(function () {
+	  //area();
+	  //overroad();
+	  mailage();
+  })
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+ <head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <style>
+    table {border-collapse: collapse;}
+    th:first-child, td:first-child {
+      border-right: 1px solid silver;
+      text-align: right;
+    }
+    th {border-bottom: 2px solid silver;}
+    td {font-family: monospace;}
+    th, td {padding: 4px;}
+  </style>
+ </head>
+ <body>
+  <div class="container"></div>
+  <script>
+	var groupBy = function(xs, accessor){
+			return xs.reduce(function(rv,x){
+      						(rv[accessor(x)] = rv[accessor(x)] || []).push(x);
+					        return rv;
+				         }, {});
+		       };
+	var rnd = d3.random.normal(1.0, 0.3);
+	var data = [
+		    17,32,47,53,60,61,64,67,70,70,71,72,73,73,74,76,
+		    77,79,81,82,83,83,83,83,84,85,86,87,87,88,89,90,
+		    91,91,92,94,94,95,96,97,98,98,99,99,99,99,99,100,100,1,
+		    101,101,102,103,103,103,103,104,106,106,106,106,107,107,
+		    114,115,116,117,117,119,120,120,120,120,121,121,12,122,
+		    122,123,124,124,125,125,126,126,127,128,129,130,131,131
+		   ]
+	// 랜덤값 원할경우
+	//var data = d3.range(100).map(function(d,i){ return ~~(Math.abs(rnd())*100); });
+	var dataGroups = groupBy(data, function(d){ return ~~(d/10); });
+	var table = d3.select('.container')
+      		      .append('table');
+	table.selectAll('th').data(['stem', 'leaf'])
+  	   .enter().append('th')
+  	   .text(function(d){ return d; });
+  table.selectAll('tr')
+	     .data(d3.keys(dataGroups).map(function(d,i){ return [d, dataGroups[d]]; }))
+	     .enter().append('tr')
+ 	     .selectAll('td')
+	     .data(function(d){ return d; })
+	     .enter().append('td')
+             .text(function(d,i,pI){
+			            return !i ? d : d.map(function(dB,i){
+					        return parseInt(dB.toString().slice(-1));
+					      }).sort().join(' ');
+		    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<meta charset="utf-8">
+  <head>
+    <title>Bar Graph - 세로형</title>
+    <style>
+      svg {width:350px; height:300px; border:1px solid black;}
+      #BarGraph rect {stroke:red; stroke-width:2px; fill:green; opacity : 0.7;}
+      .title{font-size:15pt; fill:blue;}
+      .barname{font-size: 9pt;}
+      .freq{font-size:9pt; fill:red;}
+      .axis text {font-family:sans-serif; font-size: 10px;}
+      .axis path,
+      .axis line {fill: none; stroke-width:1px; stroke:black;}
+    </style>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+
+  <body>
+    <h2>세로형 막대그래프 - 애니메이션 </h2>
+    <svg id="BarGraph"></svg> 
+    <script>
+//      var vname = ["수도권","호남권","영남권"];
+//      var dataSet = [20, 7, 13];
+      var bar;
+      var vname = [];
+      var dataSet = [];
+      var svgWidth    = 350;              // svg의 너비를 알아내는 방법은 후에 일반화
+      var svgHeight   = 300;              // svg의 높이를 알아내는 방법은 후에 일반화
+      var barWidth    =  50;
+      var barInterval = 100
+      var offsetBottom=  30;
+      var offsetAbove =  30;
+      var offsetLeft  =  30;
+      var offsetX     =  60;
+      var offsetY     =  10;
+      var yrangeScale =  10;
+      var dataMin     =   0
+      var dataMax     =  20;
+      var pxMax       = svgHeight - offsetBottom;
+      var pxMin       = pxMax - dataMax*yrangeScale; 
+      
+      d3.csv("예제100204.csv",function(error,data){
+	for(var i=0; i<data.length;i++){
+          vname.push(data[i].vname);
+	  dataSet.push(data[i].number);
+	}
+
+      bar = d3.select("#BarGraph").selectAll("rect").data(dataSet)
+      bar.enter()
+         .append("rect")
+         .attr("x",function(d,i) {return offsetX + i*barInterval;})
+         .attr("width",barWidth) 
+         .attr("height",0)
+         .attr("y",svgHeight-offsetBottom)
+ 	 .transition()
+	 .duration(2500)
+	 .delay(function(d,i){return i*200;})
+         .attr("y",function(d,i) {return svgHeight-offsetBottom - (10*d);})
+         .attr("height",function(d,i) {return yrangeScale*d+"px";}) 
+      bar.enter()
+         .append("text")
+         .data(dataSet)
+         .attr("class","freq")
+         .attr("x",function(d,i) {return offsetX+18+i*100;})
+         .attr("y",function(d,i) {return svgHeight-offsetBottom -10 - (10*d);})
+         .text(function(d,i) {return d;})
+      bar.enter()
+         .append("text")
+         .data(vname)
+         .attr("class","barname")
+         .attr("x",function(d,i) {return offsetX+5+i*100;})
+         .attr("y",285)
+         .text(function(d,i) {return d;})
+      bar.enter()
+         .append("text")
+         .attr("class","title")
+         .attr("x",70)
+         .attr("y",30)
+         .text("우리 학급 지역별 학생수")
+      var yScale = d3.scale.linear().domain([dataMin,dataMax]).range([pxMax,pxMin])
+      d3.select("#BarGraph").append("g")
+         .attr("class","axis")
+         .attr("transform","translate(30,0)")
+         .call(d3.svg.axis().scale(yScale).orient("left"))
+      })
+    </script>
+  </body>
+</html>

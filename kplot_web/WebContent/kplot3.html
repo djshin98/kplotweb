@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>KPlot</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="lib/highlight/github.css" />
+<link rel="stylesheet" href="dist/css/lobipanel.min.css" />
+<link rel="stylesheet" href="css/fileinput.min.css" />
+<link rel="stylesheet" href="css/bar.css" />
+
+<script src="lib/jquery.1.11.min.js"></script>
+<script src="lib/jquery-ui.min.js"></script>
+<script src="lib/jquery.ui.touch-punch.min.js"></script>
+<script src="bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="lib/highlight/highlight.pack.js"></script>
+<script src="dist/js/lobipanel.js"></script>
+<!--  <script src="js/d3.js"></script>-->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="js/hse.js"></script>
+<script src="js/jstorage.js"></script>
+<script src="js/pc_mcore.min.js"></script>
+<script src="js/applogin_handler.js"></script>
+<script src="js/apptable_handler.js"></script>
+
+<style>
+.modal{
+	z-index:10002;
+}
+.top-bar-item {
+	display: inline-block;
+}
+.tableitem{
+cursor:pointer;
+}
+.tableitem:hover{
+color:red;
+}
+#file-title{
+	color: white;
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 1.6em;
+    margin-top: 0.5em;
+    margin-right: 2em;
+}
+.panel-body{
+	height:400px;
+}
+.panel-body>.media{
+	height:100%;
+}
+.query-text{
+	font-size:1.2em;
+	resize: none;
+    width: 100%;
+    min-height: 300px;
+    margin: 0px;
+}
+</style>
+<script>
+	var debug = {
+		log : function(v) {
+			console.log(v);
+		}
+	};
+</script>
+
+<script src="js/ip.grid.js"></script>
+<script src="js/splitter.js"></script>
+<link href="css/ip.grid.css" rel="stylesheet" />
+<link href="css/kplot3.css" rel="stylesheet" />
+<script src="js/kplot3.js"></script>
+
+<script>
+	
+	$(document)
+			.ready(
+					function() {
+						var topmenuHeight = $('#top-menu').height();
+						var kplotContentHeight = window.innerHeight
+								- topmenuHeight;
+						$('#kplot-content').css("margin-top", topmenuHeight);
+						$('#kplot-content').height(kplotContentHeight);
+						$('#section-home').height(kplotContentHeight);
+						
+						kplot.init("#datasource","#database-query");
+						kplot.grid = $('#demo').ip_Grid({rows : 1000,cols : 35,
+											onSize : function(width) {
+												var kplotContentWidth = window.innerWidth-width;
+												$('#graph-content').css("left",width);
+												$('#graph-content').width(kplotContentWidth);
+											}
+										});
+						var kplotContentWidth = window.innerWidth
+								- $('#demo').width();
+
+						$('#graph-content').height(kplotContentHeight);
+						$('#graph-content').width(kplotContentWidth);
+						$('#graph-content').css("left", $('#demo').width());
+
+						var codes = $('.highlight code');
+						codes.each(function(ind, el) {
+							hljs.highlightBlock(el);
+						});
+
+						$('.lobipanel').lobiPanel();
+						$('#demoPanel11').lobiPanel();
+						$('#lobipanel-basic').lobiPanel();
+						$('#lobipanel-custom-control').lobiPanel({
+							reload : false,
+							close : false,
+							editTitle : false
+						});
+						$('#lobipanel-font-awesome').lobiPanel({
+							reload : {
+								icon : 'fa fa-refresh'
+							},
+							editTitle : {
+								icon : 'fa fa-edit',
+								icon2 : 'fa fa-save'
+							},
+							unpin : {
+								icon : 'fa fa-arrows'
+							},
+							minimize : {
+								icon : 'fa fa-chevron-up',
+								icon2 : 'fa fa-chevron-down'
+							},
+							close : {
+								icon : 'fa fa-times-circle'
+							},
+							expand : {
+								icon : 'fa fa-expand',
+								icon2 : 'fa fa-compress'
+							}
+						});
+						$('#lobipanel-constrain-size').lobiPanel({
+							minWidth : 300,
+							minHeight : 300,
+							maxWidth : 600,
+							maxHeight : 480
+						});
+						$('#lobipanel-from-url')
+								.on(
+										'loaded.lobiPanel',
+										function(ev, lobiPanel) {
+											var $body = lobiPanel.$el
+													.find('.panel-body');
+											$body
+													.html('<div class="highlight"><pre><code>'
+															+ $body.html()
+															+ '</code></pre></div>');
+											hljs.highlightBlock($body
+													.find('code')[0]);
+										})
+								.lobiPanel(
+										{
+											loadUrl : 'bootstrap/dist/css/bootstrap.min.css',
+											bodyHeight : 400
+										});
+
+						$('#lobipanel-multiple').find('.panel').lobiPanel({
+							sortable : true
+						});
+
+						var showSubMenu = [];
+						$('.dropdown-submenu a.test').on("click", function(e) {
+							$.each(showSubMenu, function(index, t) {
+								t.hide();
+								console.log('hide : submenu')
+							});
+
+							showSubMenu = [];
+							$(this).next('ul').toggle();
+							if ($(this).next('ul').is(':visible')) {
+								showSubMenu.push($(this).next('ul'));
+							}
+							e.stopPropagation();
+							e.preventDefault();
+						});
+
+						$('#section-home').show();
+						$('#section-example').hide();
+						$('#section-sample').hide();
+
+						$('#mySearchModal').on('show.bs.modal',
+										function(e) { 
+									$('#searchlist-container').empty();
+									kplot.ui.menu.select.search(
+											$('#searchFile').val(),
+											function(index, avv) {
+												if( index >= 0 ){
+													var tableid = "gettable_"+ index;
+													var item = $("<tr class='tableitem' id='"+tableid+"' ><td>"+(index+1)+"</td><td>"+avv.tableName+"</td><td>"+avv.tableDesc+"</td><td>@mdo</td></tr>");
+													item.bind('click',function() {
+														kplot.getTable(tableid,avv.tableName);
+														$("#mySearchModal").modal('hide');
+														$("#file-title").text(avv.tableDesc);
+													});
+													$('#searchlist-container').append(item);
+												}
+										});
+						});
+						
+						$('#searchFile').on('keydown', function(e) {
+						    if (e.which == 13) {
+						    	//$("#mySearchModal").modal('show');
+						        e.preventDefault();
+						    }
+						});
+
+					});
+
+	$(function() {
+		$('#file-input')
+				.change(
+						function(evt) {
+							$this = $(this);
+							$("#filelist-container").empty();
+							var delay = 500;
+							for (var i = 0; i < this.files.length; i++) {
+								var id = "uploadfile_" + i;
+								var fname = this.files[i].name
+										.replace(".", "_");
+								var item = $("<li id='"+id+"' style='list-style-type:none;'><i class='fa fa-file-image-o'></i>&nbsp;"
+										+ this.files[i].name + "</li>");
+								$("#filelist-container").append(item);
+								var formData = new FormData();
+								formData.append("uploadfile", this.files[i]);
+								formData.append("extra", id);
+
+								$.ajax({
+									url : 'upload',
+									processData : false,
+									contentType : false,
+									data : formData,
+									type : 'POST',
+									success : function(result) {
+										//var idresult.extra = 
+										//var fname = result.replace(".", "_");
+										$("#" + result.extra).append(" 100%");
+										delay += 200;
+										var t = window.setTimeout(function() {
+											$("#" + result.extra).remove();
+										}, delay);
+
+									},
+									error : function(result) {
+										var fname = result.replace(".", "_");
+										$("#" + fname).append(" failed");
+										$("#" + fname).remove();
+									}
+								});
+							}
+							$('#file-input').val('');
+
+						});
+	});
+</script>
+
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+	<nav id="top-menu" class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header top-bar-item">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#myNavbar">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Kplot</a>
+			</div>
+			<div class="top-bar-item">
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav">
+						<li><a href="#" onclick="kplot.ui.menu.select.home()">Home</a></li>
+						<li><a href="#" onclick="kplot.ui.menu.select.example()">Example</a></li>
+						<li><a href="#" onclick="kplot.ui.menu.select.sample()">Sample</a></li>
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#">File <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a tabindex="-1" href="#" data-toggle="modal"
+									data-target="#myModal">Upload</a></li>
+								<li><a tabindex="-1" href="#" data-toggle="modal"
+									data-target="#myQueryModal">Query</a></li>
+							</ul></li>
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#">Graph <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a tabindex="-1" href="#">HTML</a></li>
+								<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.line()">Line Graph</a></li>
+								<li class="dropdown-submenu"><a class="test" tabindex="-1"
+									href="#">Bar Graph<span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.vertical()">Vertical
+												Bar Graph</a></li>
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.horizontal()">Horizontal
+												Bar Graph</a></li>
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.stack()">Stack
+												Bar Graph</a></li>
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.ratio()">Ratio
+												Bar Graph</a></li>
+										<li><a tabindex="-1" href="#"
+											onclick="kplot.ui.menu.select.graph.bar.multi()">Multi
+												Bar Graph</a></li>
+									</ul>
+								<li class="dropdown-submenu"><a class="test" tabindex="-1"
+									href="#">Pie Graph<span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.pie.pie()">Pie Graph</a></li>
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.pie.band()">Band Graph</a></li>
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.pie.star()">Star Graph</a></li>
+									</ul></li>
+								<li class="dropdown-submenu"><a class="test" tabindex="-1"
+									href="#">Histo Graph<span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.histo.horizontal()" >Vertical Histo Graph</a></li>
+										<li><a tabindex="-1" href="#" onclick="kplot.ui.menu.select.graph.histo.vertical()" >Horizontal Histo Graph</a></li>
+									</ul></li>
+							</ul></li>
+					</ul>
+				</div>
+			</div>
+			<div class="pull-right top-bar-item ">
+				<form class="navbar-form" role="search">
+					<div class="input-group">
+						<input id="searchFile" type="text" class="form-control"
+							placeholder="Search" name="q">
+						<div class="input-group-btn">
+							<a class="btn btn-default" data-toggle="modal"
+								data-target="#mySearchModal"><i class="glyphicon glyphicon-search"></i></a>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="pull-right top-bar-item "><div id="file-title"></div></div>
+			
+		</div>
+	</nav>
+	<div id="kplot-content">
+		<div id="section-home">
+			<div class="gridContainer">
+				<div id="demo"></div>
+				<div id="graph-content">
+					<div class="lobipanel">
+						<div id="lobipanel-multiple">
+							<!-- <h3>Multiple panels with drag & drop</h3>
+							<p>Drag panels by clicking on the headers</p> -->
+							<div class="bs-example">
+								<div class="row">
+									<div id="graph-content" class="col-md-6">
+<!-- 
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<div class="panel-title">
+													<h4 id="chart-bar-title" >Default title</h4>
+												</div>
+											</div>
+											<div class="panel-body">
+												<div class="media">
+													<div class="media-left">
+														
+													</div>
+													<div class="media-body">
+														<svg id="chart-bar"></svg>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<div class="panel-title">
+													<h4>Default title</h4>
+												</div>
+											</div>
+											<div class="panel-body">
+												<div class="media">
+													<div class="media-left">
+														<a href="#"> <img class="media-object"
+															data-src="holder.js/64x64" alt="64x64"
+															src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+															data-holder-rendered="true"
+															style="width: 64px; height: 64px;">
+														</a>
+													</div>
+													<div class="media-body">
+														<h4 class="media-heading">Media heading</h4>
+														Cras sit amet nibh libero, in gravida nulla. Nulla vel
+														metus scelerisque ante sollicitudin commodo. Cras purus
+														odio, vestibulum in vulputate at, tempus viverra turpis.
+														Fusce condimentum nunc ac nisi vulputate fringilla. Donec
+														lacinia congue felis in faucibus.
+													</div>
+												</div>
+											</div>
+										</div>
+ -->
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div id="section-example" style="display: none;"
+			class="container-fluid">
+			<h1>Example Page</h1>
+			<p>통그라미 예제 파일 </p>
+			<p>Try to scroll this section and look at the navigation bar
+				while scrolling! Try to scroll this section and look at the
+				navigation bar while scrolling!</p>
+		</div>
+		<div id="section-sample" style="display: none;"
+			class="container-fluid">
+			<h1>Sample Page</h1>
+			<p>통그라미 샘플 파일</p>
+			<p>Try to scroll this section and look at the navigation bar
+				while scrolling! Try to scroll this section and look at the
+				navigation bar while scrolling!</p>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">액셀 파일 입력</h4>
+				</div>
+				<div class="modal-body">
+					<div tabindex="500" class="btn btn-primary btn-file">
+						<i class="glyphicon glyphicon-folder-open"></i>&nbsp; <span
+							class="hidden-xs">파일 추가</span> <input id="file-input" type="file"
+							name="files[]" multiple class="file-loading">
+					</div>
+					<div id="filelist">
+						<ul id="filelist-container">
+						</ul>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="mySearchModal" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+
+					<div id="searchlist">
+						<div>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Table Name</th>
+										<th>Table Description</th>
+										<th>By User</th>
+									</tr>
+								</thead>
+								<tbody id="searchlist-container">
+									
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="myQueryModal" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title" style="text-indent:1em;" ><div class="dropdown" style="float:left;">
+    <button class="btn btn-default dropdown-toggle" type="button" id="datasource-menu" data-toggle="dropdown">Data Source
+    <span class="caret"></span></button>
+    <ul id="datasource" class="dropdown-menu" role="menu" aria-labelledby="datasource-menu">
+    </ul>
+  </div><p>Statistics Database Query</p></h4>
+				</div>
+				<div class="modal-body">
+					<div>
+					<textarea class="query-text" id="database-query"></textarea>	
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" onclick="kplot.query('#datasource-menu','#database-query');" >Query</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</body>
+</html>
+

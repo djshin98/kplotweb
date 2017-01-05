@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var dataSet = [{name:'국어', med:60, min:10, max:100, Q1:50, Q3:80},
+                     {name:'수학', med:60, min:20, max:80, Q1:30, Q3:70},
+                     {name:'영어', med:40, min:15, max:90, Q1:30, Q3:60}]
+	  var p = 200;
+      var width = 1000;
+      var height = 700;
+      var svg = d3.select("body")
+                  .append("svg")
+                  .attr("width", width)
+                  .attr("height", height)
+                  .style("border", "1px solid black")
+                  .data(dataSet)
+      var g = svg.append("g");
+      
+      g.selectAll('.a').data(dataSet).enter().append("line").attr('class','a').attr("x1", function(d,i) {return d.min*5;}).attr("y1", function(d,i) {return 50+(i*p);}).attr("x2", function(d,i) {return d.min*5;}).attr("y2", function(d,i) {return 90+(i*p);}).style("stroke", "red");
+      g.selectAll('.b').data(dataSet).enter().append("rect").attr('class','b').attr("x", function(d,i) {return d.Q1*5;}).attr("y", function(d,i) {return 50+(i*p);}).attr("width", function(d,i) {return (d.Q3-d.Q1)*5;}).attr("height", 50).style("fill", "yellow").style("stroke", "black");
+      g.selectAll('.c').data(dataSet).enter().append("line").attr('class','c').attr("x1", function(d,i) {return d.med*5;}).attr("y1", function(d,i) {return 50+(i*p);}).attr("x2", function(d,i) {return d.med*5;}).attr("y2", function(d,i) {return 100+(i*p);}).style("stroke", "brown");
+      g.append("line").attr("x1", function(d,i) {return d.min*5;}).attr("y1", function(d,i) {return 75+(i*p);}).attr("x2", function(d,i) {return d.Q1*5;}).attr("y2", function(d,i) {return 75+(i*p);}).style("stroke", "blue");
+      g.append("line").attr("x1", function(d,i) {return d.Q3*5;}).attr("y1", function(d,i) {return 75+(i*p);}).attr("x2", function(d,i) {return d.max*5;}).attr("y2", function(d,i) {return 75+(i*p);}).style("stroke", "black");
+      g.append("line").attr("x1", function(d,i) {return d.max*5;}).attr("y1", function(d,i) {return 60+(i*p);}).attr("x2", function(d,i) {return d.max*5;}).attr("y2", function(d,i) {return 90+(i*p);}).style("stroke", "purple");
+
+
+      g.append("text").attr("x", function(d,i) {return d.min*5;}).attr("y", function(d,i) {return 120+(i*p);}).text("min")
+      g.append("text").attr("x", function(d,i) {return d.Q1*5;}).attr("y", function(d,i) {return 120+(i*p);}).text("Q1")
+      g.append("text").attr("x", function(d,i) {return d.med*5;}).attr("y", function(d,i) {return 120+(i*p);}).text("med")
+      g.append("text").attr("x", function(d,i) {return d.Q3*5;}).attr("y", function(d,i) {return 120+(i*p);}).text("Q3")
+      g.append("text").attr("x", function(d,i) {return d.max*5;}).attr("y", function(d,i) {return 120+(i*p);}).text("max")
+    </script>
+  </body>
+</html>

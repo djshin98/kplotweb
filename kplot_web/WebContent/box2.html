@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <style>
+    svg{width : 400px; height : 500px; border : 1px solid black;};
+    </style>
+
+    <script type = "text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+
+  <body>
+	<p>aaa<p>
+    <svg id = "BoxGraph"></svg>
+    <script>
+
+
+    var dataSet = [
+      {name:'국어', med:60, min:10, max:100},{name:'수학', med:60, min:20, max:80},{name:'영어', med:50, min:30, max:90}
+      ];
+
+      d3.select("#BoxGraph").selectAll("line1").data(dataSet).enter().append("line").attr("x1",function(d, i){return 50+3*d.min;}).attr("y1",function(d, i){return 60 + i*100;}).attr("x2",function(d, i){return 50+3*d.min;}).attr("y2", function(d, i){return 90 + 100*i;}).style("stroke", "black");
+      d3.select("#BoxGraph").selectAll("rect").data(dataSet).enter().append("rect").attr("x", function(d, i){return 50+3*d.med-50;}).attr("y", function(d, i){return 50 + i*100 + "px";}).attr("width", 100).attr("height", 50).style("fill","yellow").style("stroke", "black");;
+      d3.select("#BoxGraph").selectAll("line2").data(dataSet).enter().append("line").attr("x1",function(d, i){return 100+3*d.med-50;}).attr("y1", function(d, i){return 50 + i*100;}).attr("x2", function(d, i){return 100+3*d.med-50;}).attr("y2", function(d, i){return 100+i*100;}).style("stroke", "black");
+      d3.select("#BoxGraph").selectAll("line3").data(dataSet).enter().append("line").attr("x1", function(d, i){return 50+3*d.min;}).attr("y1", function(d, i){return 75 + i*100;}).attr("x2", function(d, i){return 50+3*d.med-50;}).attr("y2", function(d, i){return 75 + i*100;}).style("stroke", "black");
+      d3.select("#BoxGraph").selectAll("line4").data(dataSet).enter().append("line").attr("x1", function(d, i){return 100+3*d.med;}).attr("y1", function(d, i){return 75 + i*100;}).attr("x2", function(d, i){return 50+3*d.max;}).attr("y2", function(d, i){return 75 + i*100;}).style("stroke", "black");
+      d3.select("#BoxGraph").selectAll("line5").data(dataSet).enter().append("line").attr("x1",function(d, i){return 50+3*d.max;}).attr("y1",function(d, i){return 60 + i*100;}).attr("x2",function(d, i){return 50+3*d.max;}).attr("y2", function(d, i){return 90 + 100*i;}).style("stroke", "black");
+      d3.select("#BoxGraph").selectAll("text1").data(dataSet).enter().append("text").attr("x", function(d, i){return 30+3*d.min;}).attr("y", function(d, i){return 120+i*100}).text(function(d, i){return "min " + d.min;});
+      d3.select("#BoxGraph").selectAll("text2").data(dataSet).enter().append("text").attr("x", function(d, i){return 30+3*d.med;}).attr("y", function(d, i){return 120+i*100}).text(function(d, i){return "med " + d.med;});
+      d3.select("#BoxGraph").selectAll("text3").data(dataSet).enter().append("text").attr("x", function(d, i){return 30+3*d.max;}).attr("y", function(d, i){return 120+i*100}).text(function(d, i){return "max " + d.max;});
+      d3.select("#BoxGraph").selectAll("text4").data(dataSet).enter().append("text").attr("x", 10).attr("y", function(d, i){return 80 + 100*i;}).text(function(d, i){return d.name;});
+
+/*
+    var width = 500;
+    var height = 1000;
+    var svg = d3.select("body")
+               .append("svg")
+               .attr("width", width)
+               .attr("height", height)
+               .style("border", "1px solid black");
+    var g = svg.append("g");
+    g.selectAll("line").data(dataSet).enter().append("line").attr("x1", 50).attr("y1", function(i, d){return 60 + i*100;}).attr("x2", 50).attr("y2", 90 + i*100;).style("stroke", "black");
+    g.append("rect").attr("x", 100).attr("y", 50).attr("width", 100).attr("height", 50).style("fill", "yellow").style("stroke", "black");
+    g.append("line").attr("x1", 150).attr("y1", 50).attr("x2", 150).attr("y2", 100).style("stroke", "black");
+    g.append("line").attr("x1", 50).attr("y1", 75).attr("x2", 100).attr("y2", 75).style("stroke", "black");
+    g.append("line").attr("x1", 200).attr("y1", 75).attr("x2", 300).attr("y2", 75).style("stroke", "black");
+    g.append("line").attr("x1", 300).attr("y1", 60).attr("x2", 300).attr("y2", 90).style("stroke", "black");
+    g.append("text").attr("x", 35).attr("y", 120).text("min");
+    g.append("text").attr("x", 90).attr("y", 120).text("Q1");
+    g.append("text").attr("x", 135).attr("y", 120).text("med");
+    g.append("text").attr("x", 190).attr("y", 120).text("Q3");
+    g.append("text").attr("x", 290).attr("y", 120).text("max");
+  }*/
+    </script>
+  </body>
+</html>

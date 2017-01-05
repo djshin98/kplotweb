@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="euc-kr" ?>
+ <omssystem version="1.7">
+<tables version="1.7">
+<table name="access_log" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="logtime" type="datetime" size="0" />
+<field name="host" type="char" size="50" default="" />
+<field name="content" type="char" size="256" default="" />
+</table>
+
+<table name="data_querys" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="name" type="char" size="256" default="" />
+<field name="source" type="char" size="256" default="" />
+<field name="query" type="char" size="2048" default="" />
+<field name="keywords" type="char" size="1024" default="" />
+</table>
+
+<table name="data_tables" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="name" type="char" size="256" default="" />
+<field name="table_name" type="char" size="256" default="" />
+<field name="comment" type="char" size="1024" default="" />
+<field name="keywords" type="char" size="1024" default="" />
+</table>
+
+<table name="data_views" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="keywords" type="char" size="1024" default="" />
+<field name="table_name" type="char" size="256" default="" />
+<field name="view_name" type="char" size="256" default="" />
+<field name="view_data" type="char" size="4096" default="" />
+</table>
+
+<table name="table_10_1479453343905" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="구분" type="char" size="6" default="" />
+<field name="소금 0g" type="double" size="0" default="0" />
+<field name="소금 10g" type="double" size="0" default="0" />
+<field name="소금 20g" type="double" size="0" default="0" />
+<field name="소금 30g" type="double" size="0" default="0" />
+<field name="소금 40g" type="double" size="0" default="0" />
+</table>
+
+<table name="table_12_1479453344484" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="구분" type="char" size="11" default="" />
+<field name="함유량(%)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_14_1479453345207" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="얼음의
+색깔" type="char" size="6" default="" />
+<field name="녹은 양(g)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_15_1479453346777" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="시각" type="char" size="6" default="" />
+<field name="서울" type="double" size="0" default="0" />
+<field name="대구" type="double" size="0" default="0" />
+</table>
+
+<table name="table_16_1479453346960" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="연도" type="double" size="0" default="0" />
+<field name="0~14세" type="double" size="0" default="0" />
+<field name="15~64세" type="double" size="0" default="0" />
+<field name="65세 이상" type="double" size="0" default="0" />
+</table>
+
+<table name="table_17_1479453346963" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="double" size="0" default="0" />
+<field name="한국" type="double" size="0" default="0" />
+<field name="일본" type="double" size="0" default="0" />
+<field name="중국" type="double" size="0" default="0" />
+<field name="미국" type="double" size="0" default="0" />
+</table>
+
+<table name="table_18_1479453346964" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="구분" type="char" size="11" default="" />
+<field name="함유량(%)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_19_1479453346965" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="시각" type="double" size="0" default="0" />
+<field name="지면온도" type="double" size="0" default="0" />
+<field name="수면온도" type="double" size="0" default="0" />
+</table>
+
+<table name="table_1_1479453341820" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="교통수단" type="char" size="6" default="" />
+<field name="이동거리(km)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_1_1479456299992" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="각도(도)" type="double" size="0" default="0" />
+<field name="길이(cm)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_20_1479453347003" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="연도" type="double" size="0" default="0" />
+<field name="수출액(억 달러)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_21_1479453349663" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="연도" type="char" size="11" default="" />
+<field name="1인당소비량" type="double" size="0" default="0" />
+</table>
+
+<table name="table_22_1479453349781" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="V0" type="char" size="11" default="" />
+<field name="V1" type="double" size="0" default="0" />
+<field name="V2" type="double" size="0" default="0" />
+<field name="V3" type="double" size="0" default="0" />
+<field name="V4" type="double" size="0" default="0" />
+</table>
+
+<table name="table_23_1479453349870" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="연도" type="char" size="11" default="" />
+<field name="쌀생산량" type="double" size="0" default="0" />
+<field name="수탈량" type="double" size="0" default="0" />
+</table>
+
+<table name="table_24_1479453350045" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="연도" type="double" size="0" default="0" />
+<field name="가입자수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_25_1479453351372" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="double" size="0" default="0" />
+<field name="건수(건)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_26_1479453351372" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="V0" type="char" size="8" default="" />
+<field name="V1" type="double" size="0" default="0" />
+<field name="V2" type="double" size="0" default="0" />
+</table>
+
+<table name="table_27_1479453352852" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="double" size="0" default="0" />
+<field name="수입액" type="double" size="0" default="0" />
+<field name="수출액" type="double" size="0" default="0" />
+</table>
+
+<table name="table_28_1479453352970" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="double" size="0" default="0" />
+<field name="이탈주민(명)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_29_1479453353000" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="산업종류" type="char" size="19" default="" />
+<field name="종사자수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_2_1479453341821" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="레인" type="double" size="0" default="0" />
+<field name="걸린시간(초)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_2_1479456299996" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="행성이름" type="char" size="6" default="" />
+<field name="반지름" type="double" size="0" default="0" />
+</table>
+
+<table name="table_30_1479453353000" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="산업종류" type="char" size="22" default="" />
+<field name="종사자수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_31_1479453353001" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="기간" type="char" size="19" default="" />
+<field name="이동수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_32_1479453353821" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="지역" type="char" size="4" default="" />
+<field name="1980~1985" type="double" size="0" default="0" />
+<field name="1985~1990" type="double" size="0" default="0" />
+<field name="1990~1995" type="double" size="0" default="0" />
+<field name="1995~2000" type="double" size="0" default="0" />
+<field name="2000~2005" type="double" size="0" default="0" />
+<field name="2005~2010" type="double" size="0" default="0" />
+<field name="2010~2015" type="double" size="0" default="0" />
+</table>
+
+<table name="table_33_1479453355730" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="double" size="0" default="0" />
+<field name="인원 수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_34_1479453355730" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="double" size="0" default="0" />
+<field name="출생아수" type="double" size="0" default="0" />
+<field name="고령자수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_35_1479453355796" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="double" size="0" default="0" />
+<field name="출생아수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_36_1479453355944" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="구분" type="char" size="8" default="" />
+<field name="인원 수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_37_1479453355944" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="double" size="0" default="0" />
+<field name="국내" type="double" size="0" default="0" />
+<field name="국외" type="double" size="0" default="0" />
+</table>
+
+<table name="table_38_1479453356559" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="지역" type="char" size="4" default="" />
+<field name="인구" type="double" size="0" default="0" />
+</table>
+
+<table name="table_39_1479453358728" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="char" size="11" default="" />
+<field name="촌락인구" type="double" size="0" default="0" />
+<field name="도시인구" type="double" size="0" default="0" />
+</table>
+
+<table name="table_3_1479453341821" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="거리(㎝)" type="double" size="0" default="0" />
+<field name="시간(초)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_3_1479456300000" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="연도" type="double" size="0" default="0" />
+<field name="건수" type="double" size="0" default="0" />
+<field name="유출량(kl)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_40_1479453358728" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="직업종류" type="char" size="15" default="" />
+<field name="응답자수(명)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_41_1479453359052" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="국가" type="char" size="6" default="" />
+<field name="출산수(명)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_42_1479453359228" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="사건" type="char" size="28" default="" />
+<field name="인구수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_43_1479453359229" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="시" type="char" size="4" default="" />
+<field name="넓이" type="double" size="0" default="0" />
+</table>
+
+<table name="table_44_1479453359898" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="대통령 선거" type="char" size="6" default="" />
+<field name="투표율(%)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_45_1479453361426" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="시각" type="double" size="0" default="0" />
+<field name="온도" type="double" size="0" default="0" />
+</table>
+
+<table name="table_46_1479453361725" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="월" type="double" size="0" default="0" />
+<field name="꽃나무 키(cm)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_47_1479453361885" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="학년" type="char" size="6" default="" />
+<field name="몸무게(kg)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_48_1479453361885" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="날짜" type="double" size="0" default="0" />
+<field name="수면의 높이" type="double" size="0" default="0" />
+</table>
+
+<table name="table_49_1479453361885" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="날짜" type="double" size="0" default="0" />
+<field name="수면의 높이" type="double" size="0" default="0" />
+</table>
+
+<table name="table_4_1479453341822" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="각도(도)" type="double" size="0" default="0" />
+<field name="길이(cm)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_50_1479453362191" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="날짜" type="double" size="0" default="0" />
+<field name="수면의 높이" type="double" size="0" default="0" />
+</table>
+
+<table name="table_51_1479453364639" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="요일" type="char" size="2" default="" />
+<field name="횟수(회)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_52_1479453364923" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="취미종목" type="char" size="8" default="" />
+<field name="학생수(명)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_53_1479453364923" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="주" type="double" size="0" default="0" />
+<field name="타수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_54_1479453364923" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="월" type="double" size="0" default="0" />
+<field name="강수량" type="double" size="0" default="0" />
+</table>
+
+<table name="table_55_1479453364923" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="민속놀이종목" type="char" size="13" default="" />
+<field name="학생수(명)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_56_1479453364987" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="요일" type="char" size="6" default="" />
+<field name="키" type="double" size="0" default="0" />
+</table>
+
+<table name="table_57_1479453366818" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="월" type="double" size="0" default="0" />
+<field name="관중수(만명)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_58_1479453367071" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="날짜" type="double" size="0" default="0" />
+<field name="최저 기온" type="double" size="0" default="0" />
+</table>
+
+<table name="table_59_1479453367071" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="날짜" type="double" size="0" default="0" />
+<field name="최고 기온" type="double" size="0" default="0" />
+</table>
+
+<table name="table_5_1479453341823" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="행성이름" type="char" size="6" default="" />
+<field name="반지름" type="double" size="0" default="0" />
+</table>
+
+<table name="table_60_1479453367075" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="이름" type="char" size="4" default="" />
+<field name="몸무게(kg)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_61_1479453367082" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="이름" type="char" size="4" default="" />
+<field name="몸무게(kg)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_62_1479453367271" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="이름" type="char" size="4" default="" />
+<field name="키(cm)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_63_1479453369888" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="연도(년)" type="double" size="0" default="0" />
+<field name="가구수(가구)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_64_1479453369889" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="이름" type="char" size="4" default="" />
+<field name="키(cm)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_65_1479453369890" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="년도" type="double" size="0" default="0" />
+<field name="한국" type="double" size="0" default="0" />
+<field name="일본" type="double" size="0" default="0" />
+<field name="중국" type="double" size="0" default="0" />
+<field name="미국" type="double" size="0" default="0" />
+</table>
+
+<table name="table_66_1479453370082" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="연도(년)" type="double" size="0" default="0" />
+<field name="신생아수(명)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_67_1479453370084" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="이름" type="char" size="4" default="" />
+<field name="점수" type="double" size="0" default="0" />
+<field name="모둠" type="char" size="4" default="" />
+</table>
+
+<table name="table_68_1479453370085" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="구분" type="char" size="6" default="" />
+<field name="소금 0g" type="double" size="0" default="0" />
+<field name="소금 10g" type="double" size="0" default="0" />
+<field name="소금 20g" type="double" size="0" default="0" />
+<field name="소금 30g" type="double" size="0" default="0" />
+<field name="소금 40g" type="double" size="0" default="0" />
+</table>
+
+<table name="table_69_1479453372225" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="월" type="double" size="0" default="0" />
+<field name="이용자(명)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_6_1479453341846" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="연도" type="double" size="0" default="0" />
+<field name="건수" type="double" size="0" default="0" />
+<field name="유출량(kl)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_70_1479453372264" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="횟수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_71_1479453372524" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="단원" type="char" size="6" default="" />
+<field name="점수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_72_1479453372932" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="점수" type="double" size="0" default="0" />
+</table>
+
+<table name="table_7_1479453343575" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="물의온도" type="double" size="0" default="0" />
+<field name="물기둥높이1회" type="double" size="0" default="0" />
+<field name="물기둥높이2회" type="double" size="0" default="0" />
+<field name="물기둥높이3회" type="double" size="0" default="0" />
+</table>
+
+<table name="table_8_1479453343734" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="물의온도" type="double" size="0" default="0" />
+<field name="붕산녹는양(g)" type="double" size="0" default="0" />
+</table>
+
+<table name="table_9_1479453343900" version="5" super="XTable" cat="MINUTE_STAT" package="com.kplot.web.table" >
+<field name="id" type="int" size="11" constraint="pk" default="0" />
+<field name="물온도" type="double" size="0" default="0" />
+<field name="식초기둥높이" type="double" size="0" default="0" />
+<field name="우유기둥높이" type="double" size="0" default="0" />
+<field name="유리세정제기둥높이" type="double" size="0" default="0" />
+</table>
+
+</tables>
+</omssystem>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src = "http://d3js.org/d3.v4.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">  //왜 body안에 script작성?
+
+    //window.onload = function(){ // 왜 해주지??..
+      var dataSet =[
+        {name:'국어', med:40*3, min:10*3, max:100*3},   //이렇게 곱해줘서 조정 oㅋ?
+        {name:'수학', med:60*3, min:20*3, max:80*3},
+        {name:'영어', med:50*3, min:40*3, max:90*3},
+      ];
+  //  }
+  //Q1,Q3 계산해주는 함수 MAEK?
+
+      var width = 400;
+      var height = 200;
+      var svg = d3.select("body")
+                  .selectAll("svg")
+                  .data(dataSet)
+                  .enter()
+                  .append("svg") //의미??
+                  .attr("width",width)
+                  .attr("height",height)
+                  .style("border","1px solid black");
+      var g = svg.append("g");
+    //  var g = svg.append("g").attr("transform","rotate(15,150,100)");
+      g.append("line").attr("x1",function(d,i){return d.min;}).attr("y1",60).attr("x2",function(d,i){return d.min;}).attr("y2",90).style("stroke","black");
+      g.append("rect").attr("x",function(d,i){return (d.min+d.med)/2;}).attr("y",50).attr("width",function(d,i){return (d.max+d.med)/2 -(d.min+d.med)/2;}).attr("height",50).style("fill","yellow").style("stroke","black");
+      g.append("line").attr("x1",function(d,i){return d.med;}).attr("y1",50).attr("x2",function(d,i){return d.med;}).attr("y2",100).style("stroke","red");
+      g.append("line").attr("x1",function(d,i){return d.min;}).attr("y1",75).attr("x2",function(d,i){return (d.min+d.med)/2;}).attr("y2",75).style("stroke","black");
+      g.append("line").attr("x1",function(d,i){return (d.med+d.max)/2;}).attr("y1",75).attr("x2",function(d,i){return d.max;}).attr("y2",75).style("stroke","black");
+      g.append("line").attr("x1",function(d,i){return d.max;}).attr("y1",60).attr("x2",function(d,i){return d.max;}).attr("y2",90).style("stroke","black");
+      g.append("text").attr("x",30).attr("y",35).text(function(d,i) {return d.name;})
+      g.append("text").attr("x",function(d,i){return d.min-15;}).attr("y",120).text("min");   //문자크기 조정way??
+      g.append("text").attr("x",function(d,i){return (d.min+d.med)/2-15;}).attr("y",120).text("Q1");
+      g.append("text").attr("x",function(d,i){return d.med-15;}).attr("y",120).text("med");
+      g.append("text").attr("x",function(d,i){return (d.med+d.max)/2-15;}).attr("y",120).text("Q3");
+      g.append("text").attr("x",function(d,i){return d.max-15;}).attr("y",120).text("max");
+      //heidesql 하는 이유??.. 데이터베이스
+      //눈금도 그려주는
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+<script>
+var dataset = ["linear", "quad", "cubic", "sin", "exp", "circle", "elastic", "back", "bounce"];
+var width = 600;
+var height = 600;
+var xPadding = 200;
+var yPadding = 30;
+var svg = d3.select('body').append('svg').attr({width:width,height:height});
+
+svg.selectAll('text').data( dataset ).enter().append('text').attr('x',xPadding)
+.attr('y', function(d,i){
+	return yPadding+(height/(dataset.length))*i;
+	}).text( function(d){return d;})
+.attr('dx',-100).attr('dy',5).attr('font-size',18).style("text-anchor", "middle");
+
+svg.selectAll('line').data( dataset ).enter().append('line').attr({
+	x1 : xPadding, y1: function(d,i){ return yPadding+(height/(dataset.length))*i; },
+	x2 : xPadding+300,y2: function(d,i){ return yPadding+(height/(dataset.length))*i; },
+	stroke : 'red'
+});
+
+svg.selectAll('circle').data( dataset ).enter().append('circle').attr({
+	cx : xPadding , cy : function(d,i){ return yPadding+(height/(dataset.length))*i; },
+	r : yPadding/2,
+	fill : 'blue'
+}).on('mouseover',function(d){
+	d3.select(this).attr('fill','orange');
+}).on('mouseout',function(d){
+	d3.select(this).attr('fill','blue');
+}).on('click',function(d){
+	var cx = d3.select(this).attr('cx');
+	if( Number(cx) == xPadding ){
+		d3.select(this).transition().duration(2000).ease(d).attr('cx',xPadding+300);
+	}else{
+		d3.select(this).transition().duration(2000).ease(d).attr('cx',xPadding);
+	}
+});
+
+</script>
+</body>
+</html>
